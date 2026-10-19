@@ -15,6 +15,10 @@ Shift subtitle timelines and convert between **srt ⇄ ass ⇄ vtt**. Stdlib onl
 ## Install
 
 ```bash
+pip install -r requirements.txt
+```
+
+```bash
 pip install .
 # or just run it directly: python3 srtshift.py
 ```
