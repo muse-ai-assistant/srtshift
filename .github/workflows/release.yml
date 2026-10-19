@@ -1,0 +1,37 @@
+name: Build standalone executables
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            suffix: linux
+          - os: windows-latest
+            suffix: win.exe
+          - os: macos-latest
+            suffix: macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+      - name: Build
+        run: pyinstaller --onefile --name srtshift-$SUFFIX srtshift.py
+        env:
+          SUFFIX: ${{ matrix.suffix }}
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
